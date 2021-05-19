@@ -34,9 +34,9 @@ if(process.env.BOT_DOMAIN){
           port: Number(process.env.PORT),
         }
     }
-    ).then(() => console.log(new Date(), bot.botInfo?.first_name.trim(), `Bot Started on ${process.env.PORT}`));
+    ).then(() => console.log(new Date(), bot.botInfo?.first_name.trim(), `Bot Started on webhook ${process.env.PORT}`));
 }else{
-    bot.launch().then(() => console.log(new Date(), bot.botInfo?.first_name.trim(), `Bot Started on ${process.env.PORT}`));
+    bot.launch().then(() => console.log(new Date(), bot.botInfo?.first_name.trim(), `Bot Started Polling`));
 
 }
 
