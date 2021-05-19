@@ -78,8 +78,8 @@ const displayContact = async (contactInfo : ContactInfo,ctx:MyContext) => {
         const firstNames : string[] = [];
         const lastNames : string[] = [];
         fullNames.forEach(fullName => {
-            firstNames.push(_.capitalize(fullName.split(' ')[0]))
-            lastNames.push(_.capitalize(fullName.split(' ')[1]))
+            firstNames.push(_.capitalize(fullName.split(/\s+/)[0]))
+            lastNames.push(_.capitalize(fullName.split(/\s+/)[1]))
         })
         const excelContact : ExcelContact[] = [];
 
