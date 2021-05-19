@@ -31,5 +31,5 @@ export const writeToExcel = async(data:IContact[],ctx:MyContext) => {
     console.log('Creating xlsx file')
     await workbook.xlsx.writeFile('./export.xlsx')
     console.log('Sending excel file')
-    await ctx.telegram.sendDocument("@registerationKSprogram",{source:'./export.xlsx',filename:`export${data.length}`}).catch(console.log);
+    await ctx.telegram.sendDocument("@registerationKSprogram",{source:'./export.xlsx',filename:`export${data.length}.xlsx`}).catch(console.log);
 }
