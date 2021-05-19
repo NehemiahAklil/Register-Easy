@@ -26,11 +26,11 @@ bot.action('REG_EVENT',(ctx) => ctx.scene.enter('REG_CONTACT_INFO'))
 bot.action('ABOUT_EVENT',(ctx) => ctx.replyWithPhoto({source:'./assets/event.jpg'},{caption:'ልዩ የትምህርት ጊዜ ከ ፓስተር መስፍን ማሞ እና ፓ/ር ሐብቴ አዳነ  ጋር፤ በተጠቀሱት ስልክ ቁጥሮች እየደወላችሁ ተመዝገቡ።'}))
 
 bot.start((ctx) => start(ctx))
-if(process.env.PORT){
+if(process.env.BOT_DOMAIN){
     bot.launch({
         webhook: {
-            hookPath: '/',
-            port:<number>parseInt(process.env.PORT)
+          domain: process.env.BOT_DOMAIN,
+          port: Number(process.env.PORT),
         }
     }
     ).then(() => console.log(new Date(), bot.botInfo?.first_name.trim(), `Bot Started on ${process.env.PORT}`));
