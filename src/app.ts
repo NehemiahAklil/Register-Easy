@@ -1,7 +1,7 @@
 import {Telegraf, Scenes,session} from 'telegraf';
 import {conatactRegisterationWizard} from './scene'
 import{MyContext} from './context.interface'
-import {start} from './commands'
+import {reportExcel, start} from './commands'
 import './database'
 
 import Dotenv from 'dotenv'
@@ -26,11 +26,12 @@ bot.action('REG_EVENT',(ctx) => ctx.scene.enter('REG_CONTACT_INFO'))
 bot.action('ABOUT_EVENT',(ctx) => ctx.replyWithPhoto({source:'./assets/event.jpg'},{caption:'ልዩ የትምህርት ጊዜ ከ ፓስተር መስፍን ማሞ እና ፓ/ር ሐብቴ አዳነ  ጋር፤ በተጠቀሱት ስልክ ቁጥሮች እየደወላችሁ ተመዝገቡ።'}))
 
 bot.start((ctx) => start(ctx))
+bot.command('report',(ctx) => reportExcel(ctx))
+
 if(process.env.PORT){
     bot.launch({
         webhook: {
-          domain: process.env.BOT_DOMAIN,
-          hookPath:'/',
+          domain: process.env.BOT_DOMAIN,   
           port: Number(process.env.PORT),
         }
     }

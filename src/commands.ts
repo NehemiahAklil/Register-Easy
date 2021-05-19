@@ -1,5 +1,7 @@
 import {Markup} from 'telegraf';
 import { MyContext } from './context.interface';
+import { writeToExcel } from './writeExecl';
+import  Contact from './database'
 
 
 export const start = async(ctx:MyContext) => {
@@ -10,9 +12,8 @@ export const start = async(ctx:MyContext) => {
       ]))
 }
 export const reportExcel = async(ctx:MyContext) => {
-    ctx.reply('generated ',
-    Markup.inlineKeyboard([
-        Markup.button.callback('Register For Event 📋', 'REG_EVENT'),
-        Markup.button.callback('Read About Event ❔', 'ABOUT_EVENT'),
-      ]))
+    await ctx.reply('Generating Excel File...');
+    const contactList = await Contact.find();
+    await writeToExcel(contactList,ctx)
+    return ctx.reply('Sent Registered Report');   
 }
