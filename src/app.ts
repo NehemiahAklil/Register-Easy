@@ -30,6 +30,7 @@ if(process.env.BOT_DOMAIN){
     bot.launch({
         webhook: {
           domain: process.env.BOT_DOMAIN,
+          hookPath:'/',
           port: Number(process.env.PORT),
         }
     }
