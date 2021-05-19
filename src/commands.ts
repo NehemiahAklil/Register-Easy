@@ -9,3 +9,10 @@ export const start = async(ctx:MyContext) => {
         Markup.button.callback('Read About Event ❔', 'ABOUT_EVENT'),
       ]))
 }
+export const reportExcel = async(ctx:MyContext) => {
+    ctx.reply('generated ',
+    Markup.inlineKeyboard([
+        Markup.button.callback('Register For Event 📋', 'REG_EVENT'),
+        Markup.button.callback('Read About Event ❔', 'ABOUT_EVENT'),
+      ]))
+}
