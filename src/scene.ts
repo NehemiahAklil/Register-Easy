@@ -31,7 +31,9 @@ stepHandler.on('text',async (ctx) => {
     }
 
     await displayContact(contactInfo,ctx);
+    ctx.reply('Thanks For Registering',Markup.removeKeyboard());
     return ctx.scene.leave();
+
 
     // ctx.session.contactInfo = {fullName : ctx.message.text};
 
