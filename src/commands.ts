@@ -22,6 +22,20 @@ export const purge = async(ctx:MyContext) => {
     await Contact.deleteMany()
     ctx.reply('Succecfully Purged Database');
 }
+
+export const count = async(ctx:MyContext) => {
+    try{
+        const count = await Contact.countDocuments();
+        if(count){
+            return ctx.reply(`Total Number of Poeple Registered for the event is ${count}`)
+        }
+        else{
+           return ctx.reply(`Sorry It seems we ran into a problem`);
+        }
+    }catch(err) {
+        console.log(err);
+    }
+}
 export const askPurge = async(ctx:MyContext) => {
     if(process.env.DEV_ID){
         if(!(process.env.DEV_ID === ctx.from?.id.toString())){
