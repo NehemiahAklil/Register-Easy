@@ -1,7 +1,7 @@
-import {Telegraf, Scenes,session} from 'telegraf';
+import {Telegraf, Scenes,session, Context} from 'telegraf';
 import {conatactRegisterationWizard} from './scene'
 import{MyContext} from './context.interface'
-import {reportExcel, start} from './commands'
+import {askPurge, purge, reportExcel, start} from './commands'
 import './database'
 
 import Dotenv from 'dotenv'
@@ -27,7 +27,11 @@ bot.action('ABOUT_EVENT',(ctx) => ctx.replyWithPhoto({source:'./assets/event.jpg
 
 bot.start((ctx) => start(ctx))
 bot.command('report',(ctx) => reportExcel(ctx))
-
+bot.command('purge',(ctx) => askPurge(ctx))
+bot.action('PURGE',(ctx) => purge(ctx))
+bot.action('NO_PURGE',(ctx) => {
+    ctx.reply('Purge Has Been Stopped')
+})
 if(process.env.PORT){
     bot.launch({
         webhook: {
