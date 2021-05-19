@@ -55,13 +55,12 @@ export const conatactRegisterationWizard = new Scenes.WizardScene(
         console.log('Step 1')
         await ctx.replyWithHTML(`
         <b>Send Your Full Name to Start Registration</b> 
-<b>Note:</b> If you're trying to register multiple people please write each name on a new line.
+<b>Note:</b> If you're trying to register multiple people please write each name and phone number on a new line.
 <b>Example:</b> 
-    Nehemiah Aklil
-    Ezra Aklil
-    Lemi Desalign
-    Lidiya Anteneh
-        `,{});
+    Nehemiah Aklil 0947966328
+    Ezra Aklil 0940295335
+    Moti Belete 0947382466
+    `,{});
         return ctx.wizard.next();
     },
     stepHandler
