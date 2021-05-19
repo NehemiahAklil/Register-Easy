@@ -19,12 +19,27 @@ stepHandler.on('text',async (ctx) => {
         await ctx.reply('Send me your name again');
         return ctx.wizard.selectStep(currentStepIndex);
     }
-    ctx.session.contactInfo = {fullName : ctx.message.text};
-    await ctx.replyWithHTML('Press <b>"Share My Contact"</b> button or Send a list of Phone Number',
-    Markup.keyboard([
-        Markup.button.contactRequest('Share My Contact ☎'),
-      ]).resize());
-    return ctx.wizard.next();
+    const roughInfo = ctx.message.text.trim().split('\n');
+    const contactInfo : ExcelContact[] = [];
+
+    for(let i in roughInfo){
+        contactInfo.push({
+            firstName: _.capitalize(roughInfo[i].split(/\s+/)[0]),
+            lastName: _.capitalize(roughInfo[i].split(/\s+/)[1]),
+            phoneNumber: roughInfo[i].split(/\s+/)[2]
+        })
+    }
+
+    await displayContact(contactInfo,ctx);
+    return ctx.scene.leave();
+
+    // ctx.session.contactInfo = {fullName : ctx.message.text};
+
+    // await ctx.replyWithHTML('Press <b>"Share My Contact"</b> button or Send a list of Phone Number',
+    // Markup.keyboard([
+    //     Markup.button.contactRequest('Share My Contact ☎'),
+    //   ]).resize());
+    // return ctx.wizard.next();
 })
 stepHandler.use(async(ctx) =>{
     console.log('Step 2')
@@ -47,50 +62,46 @@ export const conatactRegisterationWizard = new Scenes.WizardScene(
         `,{});
         return ctx.wizard.next();
     },
-    stepHandler,
-    async (ctx) => {
-        if(ctx.message && "text" in ctx.message){
-            console.log(ctx.message);
-            ctx.session.contactInfo = {telephone : ctx.message.text,...ctx.session.contactInfo};
-            await ctx.reply('Thanks For Registering',Markup.removeKeyboard());
-            await displayContact(ctx.session.contactInfo,ctx)
-            return ctx.scene.leave();
-        }
-        else{
-            if(ctx.message && "contact" in ctx.message){
-                const phone = ctx.message.contact.phone_number.replace("+251","0");
-                ctx.session.contactInfo = {telephone : phone,...ctx.session.contactInfo};
-                await ctx.reply('Thanks For Registering',Markup.removeKeyboard());
-                await displayContact(ctx.session.contactInfo,ctx)
-                return ctx.scene.leave();
-            }
-            console.log(ctx.message);
-            const currentStepIndex = ctx.wizard.cursor - 1;
-            return ctx.wizard.selectStep(currentStepIndex);
-        }
-    }
+    stepHandler
+    // async (ctx) => {
+    //     if(ctx.message && "text" in ctx.message){
+    //         console.log(ctx.message);
+    //         ctx.session.contactInfo = {telephone : ctx.message.text,...ctx.session.contactInfo};
+    //         await ctx.reply('Thanks For Registering',Markup.removeKeyboard());
+    //         await displayContact(ctx.session.contactInfo,ctx)
+    //         return ctx.scene.leave();
+    //     }
+    //     else{
+    //         if(ctx.message && "contact" in ctx.message){
+    //             const phone = ctx.message.contact.phone_number.replace("+251","0");
+    //             ctx.session.contactInfo = {telephone : phone,...ctx.session.contactInfo};
+    //             await ctx.reply('Thanks For Registering',Markup.removeKeyboard());
+    //             await displayContact(ctx.session.contactInfo,ctx)
+    //             return ctx.scene.leave();
+    //         }
+    //         console.log(ctx.message);
+    //         const currentStepIndex = ctx.wizard.cursor - 1;
+    //         return ctx.wizard.selectStep(currentStepIndex);
+    //     }
+    // }
 )
 
-const displayContact = async (contactInfo : ContactInfo,ctx:MyContext) => {
-    if(contactInfo.fullName && contactInfo.telephone){
-        const fullNames : string[] = contactInfo.fullName?.split('\n');
-        const telephones : string[]= contactInfo.telephone?.split('\n');
-        const firstNames : string[] = [];
-        const lastNames : string[] = [];
-        fullNames.forEach(fullName => {
-            firstNames.push(_.capitalize(fullName.split(/\s+/)[0]))
-            lastNames.push(_.capitalize(fullName.split(/\s+/)[1]))
-        })
-        const excelContact : ExcelContact[] = [];
+const displayContact = async (contactInfo : ExcelContact[],ctx:MyContext) => {
+    // if(contactInfo.fullName && contactInfo.telephone){
+        // const fullNames : string[] = contactInfo.fullName?.split('\n');
+        // const telephones : string[]= contactInfo.telephone?.split('\n');
+        // const firstNames : string[] = [];
+        // const lastNames : string[] = [];
+        // fullNames.forEach(fullName => {
+        //     firstNames.push(_.capitalize(fullName.split(/\s+/)[0]))
+        //     lastNames.push(_.capitalize(fullName.split(/\s+/)[1]))
+        // })
 
-        for(let i = 0; i < fullNames?.length;i++){
-            if(fullNames && telephones){
-                console.log(`${<string>fullNames![i]} ${<string>telephones![i]}`)
-                excelContact.push({firstName:firstNames[i],lastName:lastNames[i],phoneNumber:telephones[i]})
-            }
+        for(let i = 0; i < contactInfo?.length;i++){
+                console.log(`${<string>contactInfo![i].firstName} ${contactInfo![i].lastName} ${<string>contactInfo![i].phoneNumber}`)
         }
-        for(let i in excelContact){
-            await Contact.create({firstName:excelContact[i].firstName,lastName:excelContact[i].lastName,phoneNumber:excelContact[i].phoneNumber});
+        for(let i in contactInfo){
+            await Contact.create({firstName:contactInfo[i].firstName,lastName:contactInfo[i].lastName,phoneNumber:contactInfo[i].phoneNumber});
             const count = await Contact.countDocuments();
             console.log('Count is ',count)
             if (count % 5 == 0){
@@ -100,6 +111,6 @@ const displayContact = async (contactInfo : ContactInfo,ctx:MyContext) => {
         }
         // await writeToExcel(excelContact);
         return;
-    }
-    return; 
+    // }
+    // return; 
 }
